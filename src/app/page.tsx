@@ -9,20 +9,29 @@ export default async function Home() {
   const plans: Plans[] = await res.json()
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-            <ul>
-            {plans.map((plan) => (
-              <li key={plan.id}>
-                <Link href={`plan/${plan.id}`}>
-                    <div>
-                      <h2>{plan.title}</h2>
-                      <div>{plan.period}</div>
+        <div className="max-w-screen-lg my-0 mx-auto py-2.5">
+            <ul className="grid grid-flow-col gap-4">
+              {plans.map((plan) => (
+                <li key={plan.id}>
+                  <Link href={`plan/${plan.id}`} className="block max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+                    <div className="h-52 overflow-hidden">
+                      {/* todo: 画像はサーバーから取得したい */}
+                      <img src="https://placehold.jp/920x613.png" alt="" />
                     </div>
-                </Link>
-              </li>
-            ))}
+                    <div className="p-5">
+                      <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{plan.title}</h2>
+                      <div className="text-sm">
+                        <span className="text-xl">{plan.period}</span>
+                        <span className="ml-1">日間</span>
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+              ))}
           </ul>
+        </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
       </footer>
