@@ -15,8 +15,13 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <header>
+          <header className="bg-yellow-300">
+            <div className="max-w-screen-lg my-0 mx-auto py-2.5">
+              <div className="flex justify-between items-center">
+                <h1 className="text-xl font-bold">trip todo</h1>
           <Button link='/plan/new' text='新規プラン作成' />
+              </div>
+            </div>
         </header>
         {children}
       </body>
