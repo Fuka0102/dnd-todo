@@ -14,7 +14,7 @@ export default async function Home() {
             <ul>
             {plans.map((plan) => (
               <li key={plan.id}>
-                <Link href={``}>
+                <Link href={`plan/${plan.id}`}>
                     <div>
                       <h2>{plan.title}</h2>
                       <div>{plan.period}</div>
