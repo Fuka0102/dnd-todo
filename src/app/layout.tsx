@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Button from './components/Button';
 
 export const metadata: Metadata = {
   title: "Dnd Todo",
@@ -14,6 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <header>
+          <Button link='/plan/new' text='新規プラン作成' />
+        </header>
         {children}
       </body>
     </html>
