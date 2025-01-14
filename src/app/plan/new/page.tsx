@@ -1,7 +1,9 @@
 'use client';
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CreatePlan () {
+    const router = useRouter();
     const [id, setId] = useState('');
     const [title, setTitle] = useState('');
     const [period, setPeriod] = useState('');
@@ -19,7 +21,8 @@ export default function CreatePlan () {
             body: JSON.stringify({ id, title, period }),
         });
 
-        console.log(newPlan);
+        router.push("/");
+        router.refresh();
     };
 
     return (
