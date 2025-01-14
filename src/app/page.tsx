@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { Database } from '../types/database.types';
 
+type Plans = Database['public']['Tables']['plans']['Row'];
+
 export default async function Home() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const res = await fetch(`${API_URL}/api/`, { cache: "no-store" });
-  const plans = await res.json()
+  const plans: Plans[] = await res.json()
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
