@@ -22,11 +22,11 @@ export default function RootLayout({
                 <h1 className="text-xl font-bold">
                   <Link href="/">trip todo</Link>
                 </h1>
-          <Button link='/plan/new' text='新規プラン作成' />
+                <Button link='/plan/new' text='新規プラン作成' />
               </div>
             </div>
-        </header>
-        {children}
+          </header>
+          {children}
       </body>
     </html>
   );

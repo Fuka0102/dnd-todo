@@ -26,7 +26,7 @@ export default function CreatePlan () {
     };
 
     return (
-        <div>
+        <div className="max-w-screen-lg my-0 mx-auto py-2.5">
             <h2>Create Plan</h2>
     
             <form onSubmit={ handleSubmit }>
