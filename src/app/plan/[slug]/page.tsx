@@ -12,8 +12,8 @@ export default async function Plan({ params }: { params: Promise<{ slug: string 
     const plan = await res.json();
 
     return (
-        <>
-            <h2>{plan.title}</h2>
-        </>
+        <div className="max-w-screen-lg my-0 mx-auto py-2.5">
+            <h2 className="font-bold text-2xl text-center">{plan.title}</h2>
+        </div>
     );
 }
