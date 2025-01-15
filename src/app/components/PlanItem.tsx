@@ -1,20 +1,19 @@
 'use client';
 
 import React from 'react';
-import {useDraggable} from '@dnd-kit/core';
+import { useSortable } from "@dnd-kit/sortable";
 
-export default function PlanItem (props : { 'children': string }) {
-    const {attributes, listeners, setNodeRef, transform} = useDraggable({
-        id: 'draggable',
-    });
+export default function PlanItem ({ id, title } : { 'id': string, 'title': string }) {
+    const { attributes, listeners, setNodeRef, transform } =
+    useSortable({ id });
+
     const style = transform ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
     } : undefined;
 
-    
     return (
-    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
-        {props.children}
-    </button>
+        <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+            {title}
+        </div>
     );
 }
