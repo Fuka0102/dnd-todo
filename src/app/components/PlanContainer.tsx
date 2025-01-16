@@ -51,7 +51,6 @@ export default function PlanContainer () {
         }]
     });
     const [id, setActiveId] = useState(null);
-    const [projectData, setProjectData] = useState<Data>(data);
 
     function getData(event: { active: Active; over: Over | null }) {
         const { active, over } = event;
