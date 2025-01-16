@@ -1,25 +1,14 @@
 `use client`;
 
-import React, { useState } from "react";
+import React, { ChangeEventHandler, MouseEventHandler, useState } from "react";
 
-export default function AddTodo () {
-    const [todoText, setTodoText] = useState(""); 
+type PropsType = {
+    todoText?: string | number | readonly string[] | undefined,
+    onChangeTodoText?: ChangeEventHandler<HTMLElement>,
+    onClickAdd?: MouseEventHandler<HTMLElement>
+};
 
-    function onChangeTodoText (e: React.ChangeEvent<HTMLInputElement>) {
-        setTodoText(e.target.value);
-    }
-
-    function onClickAdd () {
-        if (todoText === "") return;
-        
-        const newTodo = {
-            id: todoText,
-            title: todoText,
-        }
-
-        setTodoText("");
-    }
-
+export default function AddTodo ({ todoText, onChangeTodoText, onClickAdd }: PropsType) {
     return (
         <div>
             <input value={todoText} onChange={onChangeTodoText} />

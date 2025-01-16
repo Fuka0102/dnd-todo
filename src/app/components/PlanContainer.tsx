@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import { DndContext, DragEndEvent, Active, Over, CollisionDetection, closestCorners, UniqueIdentifier, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
+import AddTodo from '../components/AddTodo';
 import { Data, todoData } from '../../data';
 
 export default function PlanContainer () {
@@ -115,21 +116,54 @@ export default function PlanContainer () {
         return collisions;
     };
 
+    const [todoText, setTodoText] = useState(""); 
+
+    function onChangeTodoText (e: React.ChangeEvent<HTMLInputElement>) {
+        setTodoText(e.target.value);
+    }
+
+    function onClickAdd () {
+        if (todoText === "") return;
+        
+        const newTodo = {
+            id: todoText,
+            title: todoText,
+        }
+
+        const firstList = data.lists.find(list => list.id === 'list-sample');
+
+        if(!firstList) return;
+        const newTodoList = [...firstList.todos, newTodo];
+
+        data.lists.map((list, index) => {
+            if (index === 0) {
+                list.todos.push(newTodo)
+            }
+        });
+
+        setData(data);
+
+        setTodoText("");
+    }
+
     return (
-        <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners}>
-            <div className="grid grid-cols-3 gap-4 mt-4">
-                {data.lists.map((list) => (
-                    <div className="border" key={list.id}>
-                        <SortableContext id={list.id} items={list.todos}>
-                            <div>
-                                {list.todos.map((todo) => (
-                                    <PlanItem key={todo.id} id={todo.id} title={todo.title} />
-                                ))}
-                            </div>
-                        </SortableContext>
-                    </div>
-                ))}
-            </div>
-        </DndContext>
+        <>
+            <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
+            <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners}>
+                <div className="grid grid-cols-3 gap-4 mt-4">
+                    {data.lists.map((list) => (
+                        <div className="border" key={list.id}>
+                            <SortableContext id={list.id} items={list.todos}>
+                                <div>
+                                    {list.todos.map((todo) => (
+                                        <PlanItem key={todo.id} id={todo.id} title={todo.title} />
+                                    ))}
+                                </div>
+                            </SortableContext>
+                        </div>
+                    ))}
+                </div>
+            </DndContext>
+        </>
     )
 }
