@@ -68,13 +68,15 @@ export default function PlanContainer () {
 
     return (
         <DndContext onDragEnd={handleDragEnd} id={data.id}>
-            <SortableContext items={data.todos}>
-                <div>
-                    {data.todos.map((todo) => (
-                        <PlanItem key={todo.id} id={todo.id} title={todo.title} />
-                    ))}
-                </div>
-            </SortableContext>
+            {data.lists.map((list) => (
+                <SortableContext key={list.id} id={list.id} items={list.todos}>
+                    <div>
+                        {list.todos.map((todo) => (
+                            <PlanItem key={todo.id} id={todo.id} title={todo.title} />
+                        ))}
+                    </div>
+                </SortableContext>
+            ))}
         </DndContext>
     )
 }
