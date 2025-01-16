@@ -52,7 +52,7 @@ export default function PlanContainer () {
     });
     const [id, setActiveId] = useState(null);
 
-    function getData(event: { active: Active; over: Over | null }) {
+    function getSortedData(event: { active: Active; over: Over | null }) {
         const { active, over } = event;
         if (!over) return;
         if (active.id === over.id) return;
