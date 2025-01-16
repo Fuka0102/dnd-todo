@@ -72,15 +72,25 @@ export default function PlanContainer () {
             to: toSortable ?? notToSortable,
         };
     }
-        
-        const activeSortable = active.data.current?.sortable;
-        const newSortable = over.data.current?.sortable;
-        if (!activeSortable || !newSortable) return;
 
-        setData ({
-            ...data,
-            todos: arrayMove( data.todos, activeSortable.index, newSortable.index ),
+    function handleDragEnd(event: DragEndEvent) {
+        setActiveId(null);
+        const sortedData = getSortedData(event);
+        if(!sortedData) return;
+
+        const {from, to} = sortedData;
+        if(from.containerId !== to.containerId) return;
+
+        const list = data.lists.find(list => list.id == from.containerId);
+        if(!list) return;
+
+        const newTodos = arrayMove(list.todos, from.index, to.index);
+        const newLists = data.lists.map(list => {
+            if(list.id === from.containerId) return {...list, todos: newTodos};
+            return list;
         });
+
+        setData({...data, lists: newLists});
     }
 
     return (
