@@ -94,16 +94,19 @@ export default function PlanContainer () {
     }
 
     return (
-        <DndContext onDragEnd={handleDragEnd} id={data.id}>
-            {data.lists.map((list) => (
-                <SortableContext key={list.id} id={list.id} items={list.todos}>
-                    <div>
-                        {list.todos.map((todo) => (
-                            <PlanItem key={todo.id} id={todo.id} title={todo.title} />
-                        ))}
+            <div className="flex">
+                {data.lists.map((list) => (
+                    <div className="border" key={list.id}>
+                        <SortableContext id={list.id} items={list.todos}>
+                            <div>
+                                {list.todos.map((todo) => (
+                                    <PlanItem key={todo.id} id={todo.id} title={todo.title} />
+                                ))}
+                            </div>
+                        </SortableContext>
                     </div>
-                </SortableContext>
-            ))}
+                ))}
+            </div>
         </DndContext>
     )
 }
