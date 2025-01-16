@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
-import { DndContext, DragEndEvent, useDroppable } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, useDroppable, Active, Over } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 
@@ -50,11 +50,29 @@ export default function PlanContainer () {
             ],
         }]
     });
+    const [id, setActiveId] = useState(null);
+    const [projectData, setProjectData] = useState<Data>(data);
 
-    function handleDragEnd (event : DragEndEvent) {
+    function getData(event: { active: Active; over: Over | null }) {
         const { active, over } = event;
         if (!over) return;
         if (active.id === over.id) return;
+
+        const fromSortable = active.data.current?.sortable;
+        if (!fromSortable) return;
+
+        const toSortable = over.data.current?.sortable;
+        const notToSortable = {
+            containerId: over.id,
+            index: NaN,
+            items: NaN,
+        }
+
+        return {
+            from: fromSortable,
+            to: toSortable ?? notToSortable,
+        };
+    }
         
         const activeSortable = active.data.current?.sortable;
         const newSortable = over.data.current?.sortable;
