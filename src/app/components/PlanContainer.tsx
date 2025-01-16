@@ -159,7 +159,7 @@ export default function PlanContainer () {
 
     return (
         <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners}>
-            <div className="flex">
+            <div className="grid grid-cols-3 gap-4 mt-4">
                 {data.lists.map((list) => (
                     <div className="border" key={list.id}>
                         <SortableContext id={list.id} items={list.todos}>
