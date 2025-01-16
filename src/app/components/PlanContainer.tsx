@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
-import { DndContext, DragEndEvent, Active, Over, CollisionDetection, closestCorners, UniqueIdentifier, DragStartEvent } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, Active, Over, CollisionDetection, closestCorners, UniqueIdentifier, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 
@@ -99,6 +99,36 @@ export default function PlanContainer () {
         setData({...data, lists: newLists});
     }
 
+    function handleDragOver(event: DragOverEvent){
+        const sortedData = getSortedData(event);
+
+        if(!sortedData) return;
+
+        const {from, to} = sortedData;
+
+        if(from.containerId === to.containerId) return;
+
+        const fromList = data.lists.find(list => list.id == from.containerId);
+        const toList = data.lists.find(list => list.id == to.containerId);
+        if(!fromList || !toList) return;
+
+        const moveTodo = fromList.todos.find(todo => todo.id === from.items[from.index]);
+        if(!moveTodo) return;
+
+        const newFromTodo = fromList.todos.filter((todo) => todo.id !== moveTodo.id);
+        
+        const newToTodo = [...toList.todos.slice(0, to.index), moveTodo, ...toList.todos.slice(to.index)];
+
+        const newLists = data.lists.map(list => {
+            if(list.id === from.containerId) return {...list, todos: newFromTodo};
+            if(list.id === to.containerId) return {...list, todos: newToTodo};
+
+            return list;
+        });
+        setData({...data, lists: newLists});
+    }
+
+
     const customClosestCorners: CollisionDetection = (args) => {
         const cornerCollisions = closestCorners(args);
         
@@ -128,7 +158,7 @@ export default function PlanContainer () {
     };
 
     return (
-        <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners}>
+        <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners}>
             <div className="flex">
                 {data.lists.map((list) => (
                     <div className="border" key={list.id}>
