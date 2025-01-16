@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
-import { DndContext, DragEndEvent, Active, Over, CollisionDetection, closestCorners, UniqueIdentifier } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, Active, Over, CollisionDetection, closestCorners, UniqueIdentifier, DragStartEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 
@@ -73,6 +73,12 @@ export default function PlanContainer () {
         };
     }
 
+    function handleDragStart(event: DragStartEvent) {
+        const {active} = event;
+        if(!active) return;
+        setActiveId(active.id);
+    }
+
     function handleDragEnd(event: DragEndEvent) {
         setActiveId(null);
         const sortedData = getSortedData(event);
@@ -122,7 +128,7 @@ export default function PlanContainer () {
     };
 
     return (
-        <DndContext onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners}>
+        <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners}>
             <div className="flex">
                 {data.lists.map((list) => (
                     <div className="border" key={list.id}>
