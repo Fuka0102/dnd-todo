@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import { useSortable } from "@dnd-kit/sortable";
 
-export default function PlanItem ({ id, title } : { 'id': string, 'title': string }) {
+export default function PlanItem ({ id, title, onClickDelete } : { 'id': string, 'title': string, 'onClickDelete': MouseEventHandler<HTMLElement>}) {
     const { attributes, listeners, setNodeRef, transform } =
     useSortable({ id });
 
@@ -14,6 +14,9 @@ export default function PlanItem ({ id, title } : { 'id': string, 'title': strin
     return (
         <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
             {title}
+            <div>
+                <button onClick={onClickDelete}>削除</button>
+            </div>
         </div>
     );
 }
