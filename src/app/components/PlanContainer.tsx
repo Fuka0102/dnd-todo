@@ -128,24 +128,25 @@ export default function PlanContainer () {
 
     function onClickAdd () {
         if (todoText === "") return;
+
+        const copiedTodoData = { ...todoData };
         
         const newTodo = {
             id: todoText,
             title: todoText,
         }
 
-        const firstList = data.lists.find(list => list.id === 'list-sample');
+        const firstList = copiedTodoData.lists.find(list => list.id === 'list-sample');
 
         if(!firstList) return;
-        const newTodoList = [...firstList.todos, newTodo];
 
-        data.lists.map((list, index) => {
+        copiedTodoData.lists.map((list, index) => {
             if (index === 0) {
                 list.todos.push(newTodo)
             }
         });
 
-        setData(data);
+        setData(copiedTodoData);
 
         setTodoText("");
     }
