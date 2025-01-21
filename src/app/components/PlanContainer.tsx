@@ -10,6 +10,8 @@ import { Data, todoData } from '../../data';
 export default function PlanContainer () {
     const [data, setData] = useState<Data>(todoData);
     const [id, setActiveId] = useState<UniqueIdentifier | null>(null);
+    const [editedItemId, setEditedItemId] = useState<string | null>(null);
+    const [editedText, setEditedText] = useState("");
 
     const sensors = useSensors(
         useSensor(MouseSensor, { activationConstraint: { distance: 5 } })
@@ -166,6 +168,21 @@ export default function PlanContainer () {
         setData(copiedTodoData);
     }
 
+    function onClickEdit (id: string) {
+        const copiedTodoData = { ...todoData };
+        let filteredData = [];
+        
+        copiedTodoData.lists.map((list) => {
+            filteredData = list.todos.filter((todo) => {
+                return todo.id !== id;
+            })
+
+            list.todos = filteredData;
+        });
+
+        setData(copiedTodoData);
+    }
+
     return (
         <>
             <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
@@ -174,11 +191,21 @@ export default function PlanContainer () {
                     {data.lists.map((list) => (
                         <div className="border" key={list.id}>
                             <SortableContext id={list.id} items={list.todos}>
-                                <div>
                                     {list.todos.map((todo) => (
-                                        <PlanItem key={todo.id} id={todo.id} title={todo.title} onClickDelete={()=> onClickDelete(todo.id)} />
+                                        <div key={todo.id}>
+                                            {editedItemId === todo.id ? (
+                                                <input
+                                                    type="text"
+                                                    key={todo.id}
+                                                    placeholder={todo.title}
+                                                    value={editedText}
+                                                    onChange={(e) => setEditedText(e.target.value)}
+                                                />
+                                            ) : (
+                                                <PlanItem key={todo.id} id={todo.id} title={todo.title} onClickDelete={()=> onClickDelete(todo.id)} onClickEdit={() => setEditedItemId(todo.id)} />
+                                            )}
+                                        </div>
                                     ))}
-                                </div>
                             </SortableContext>
                         </div>
                     ))}
