@@ -3,7 +3,7 @@
 import React, { MouseEventHandler } from 'react';
 import { useSortable } from "@dnd-kit/sortable";
 
-export default function PlanItem ({ id, title, onClickDelete } : { 'id': string, 'title': string, 'onClickDelete': MouseEventHandler<HTMLElement>}) {
+export default function PlanItem ({ id, title, onClickDelete, onClickEdit } : { 'id': string, 'title': string, 'onClickDelete': MouseEventHandler<HTMLElement>, 'onClickEdit': MouseEventHandler<HTMLElement>}) {
     const { attributes, listeners, setNodeRef, transform } =
     useSortable({ id });
 
@@ -16,6 +16,7 @@ export default function PlanItem ({ id, title, onClickDelete } : { 'id': string,
             {title}
             <div>
                 <button onClick={onClickDelete}>削除</button>
+                <button onClick={onClickEdit}>編集</button>
             </div>
         </div>
     );
