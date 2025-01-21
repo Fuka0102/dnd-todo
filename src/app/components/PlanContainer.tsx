@@ -174,7 +174,7 @@ export default function PlanContainer () {
         copiedTodoData.lists.map((list) => {
             list.todos.map((todo) => {
                 if (todo.id === id) {
-                    todo.title = editedText;
+                    todo.title = editedText ? editedText : todo.title;
                     setEditedItemId(null);
                 }
             })
