@@ -170,14 +170,14 @@ export default function PlanContainer () {
 
     function onClickEdit (id: string) {
         const copiedTodoData = { ...todoData };
-        let filteredData = [];
         
         copiedTodoData.lists.map((list) => {
-            filteredData = list.todos.filter((todo) => {
-                return todo.id !== id;
+            list.todos.map((todo) => {
+                if (todo.id === id) {
+                    todo.title = editedText;
+                    setEditedItemId(null);
+                }
             })
-
-            list.todos = filteredData;
         });
 
         setData(copiedTodoData);
@@ -194,13 +194,16 @@ export default function PlanContainer () {
                                     {list.todos.map((todo) => (
                                         <div key={todo.id}>
                                             {editedItemId === todo.id ? (
-                                                <input
-                                                    type="text"
-                                                    key={todo.id}
-                                                    placeholder={todo.title}
-                                                    value={editedText}
-                                                    onChange={(e) => setEditedText(e.target.value)}
-                                                />
+                                                <>
+                                                    <input
+                                                        type="text"
+                                                        key={todo.id}
+                                                        placeholder={todo.title}
+                                                        value={editedText}
+                                                        onChange={(e) => setEditedText(e.target.value)}
+                                                    />
+                                                    <button onClick={(e) => onClickEdit(todo.id)}>編集完了</button>
+                                                </>
                                             ) : (
                                                 <PlanItem key={todo.id} id={todo.id} title={todo.title} onClickDelete={()=> onClickDelete(todo.id)} onClickEdit={() => setEditedItemId(todo.id)} />
                                             )}
