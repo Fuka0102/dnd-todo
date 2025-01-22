@@ -93,7 +93,6 @@ export default function PlanContainer () {
         setData({...data, lists: newLists});
     }
 
-
     const customClosestCorners: CollisionDetection = (args) => {
         const cornerCollisions = closestCorners(args);
         
