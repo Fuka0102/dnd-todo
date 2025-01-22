@@ -15,7 +15,7 @@ export default function PlanItem ({ id, title, onClickDelete, onClickEdit } : { 
 
     return (
         <div className="w-full inline-flex items-center gap-x-3 py-4 px-4 cursor-grab text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg" ref={setNodeRef} style={style} {...listeners} {...attributes}>
-            {title}
+            <div className="w-9/12">{title}</div>
             <div className="flex align-center">
                 <button onClick={onClickDelete} className="prime:pen-to-square"><RiDeleteBinLine /></button>
                 <button onClick={onClickEdit} className="ml-2"><FiEdit2 /></button>

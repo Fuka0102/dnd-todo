@@ -184,6 +184,10 @@ export default function PlanContainer () {
         setData(copiedTodoData);
     }
 
+    function onClickEditCancel () {
+        setEditedItemId(null);
+    }
+
     return (
         <>
             <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
@@ -205,6 +209,7 @@ export default function PlanContainer () {
                                                         onChange={(e) => setEditedText(e.target.value)}
                                                     />
                                                     <button onClick={(e) => onClickEdit(todo.id)}><FiSave /></button>
+                                                    <button onClick={onClickEditCancel}><MdOutlineCancel /></button>
                                                 </div>
                                             ) : (
                                                 <PlanItem key={todo.id} id={todo.id} title={todo.title} onClickDelete={()=> onClickDelete(todo.id)} onClickEdit={() => setEditedItemId(todo.id)} />
