@@ -153,7 +153,7 @@ export default function PlanContainer () {
     }
 
     function onClickDelete (id: string) {
-        const copiedTodoData = { ...todoData };
+        const copiedTodoData = { ...data };
         let filteredData = [];
         
         copiedTodoData.lists.map((list) => {
@@ -168,7 +168,7 @@ export default function PlanContainer () {
     }
 
     function onClickEdit (id: string) {
-        const copiedTodoData = { ...todoData };
+        const copiedTodoData = { ...data };
         
         copiedTodoData.lists.map((list) => {
             list.todos.map((todo) => {
