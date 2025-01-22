@@ -6,6 +6,8 @@ import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 import AddTodo from '../components/AddTodo';
 import { Data, todoData } from '../../data';
+import { FiSave } from "react-icons/fi";
+import { MdOutlineCancel } from "react-icons/md";
 
 export default function PlanContainer () {
     const [data, setData] = useState<Data>(todoData);
@@ -193,16 +195,17 @@ export default function PlanContainer () {
                                     {list.todos.map((todo) => (
                                         <div key={todo.id}>
                                             {editedItemId === todo.id ? (
-                                                <>
+                                                <div className="w-full inline-flex items-center gap-x-3 py-2 px-4 cursor-grab text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
                                                     <input
+                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                         type="text"
                                                         key={todo.id}
                                                         placeholder={todo.title}
                                                         value={editedText}
                                                         onChange={(e) => setEditedText(e.target.value)}
                                                     />
-                                                    <button onClick={(e) => onClickEdit(todo.id)}>編集完了</button>
-                                                </>
+                                                    <button onClick={(e) => onClickEdit(todo.id)}><FiSave /></button>
+                                                </div>
                                             ) : (
                                                 <PlanItem key={todo.id} id={todo.id} title={todo.title} onClickDelete={()=> onClickDelete(todo.id)} onClickEdit={() => setEditedItemId(todo.id)} />
                                             )}
