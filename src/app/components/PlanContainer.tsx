@@ -132,7 +132,7 @@ export default function PlanContainer () {
     function onClickAdd () {
         if (todoText === "") return;
 
-        const copiedTodoData = { ...todoData };
+        const copiedTodoData = { ...data };
         
         const newTodo = {
             id: todoText,
