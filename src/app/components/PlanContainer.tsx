@@ -197,7 +197,7 @@ export default function PlanContainer () {
                     {data.lists.map((list) => (
                         <SortableContext id={list.id} items={list.todos} key={list.id}>
                             <Droppable key={list.id}  id={list.id}>
-                                <div className="border">
+                                <div className="border min-h-80">
                                     {list.todos.map((todo) => (
                                         <div key={todo.id}>
                                             {editedItemId === todo.id ? (
