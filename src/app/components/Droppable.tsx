@@ -6,7 +6,6 @@ function Droppable (props) {
         id: props.id,
     });
     
-    console.log(props)
     return (
         <div ref={setNodeRef}>
             {props.children}
