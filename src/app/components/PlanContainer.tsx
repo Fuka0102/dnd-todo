@@ -5,6 +5,7 @@ import { DndContext, DragEndEvent, Active, Over, CollisionDetection, closestCorn
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 import AddTodo from '../components/AddTodo';
+import Droppable from '../components/Droppable';
 import { Data, todoData } from '../../data';
 import { FiSave } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
@@ -194,8 +195,9 @@ export default function PlanContainer () {
             <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners} sensors={sensors}>
                 <div className="grid grid-cols-3 gap-4 mt-4">
                     {data.lists.map((list) => (
-                        <div className="border" key={list.id}>
-                            <SortableContext id={list.id} items={list.todos}>
+                        <SortableContext id={list.id} items={list.todos} key={list.id}>
+                            <Droppable key={list.id}  id={list.id}>
+                                <div className="border">
                                     {list.todos.map((todo) => (
                                         <div key={todo.id}>
                                             {editedItemId === todo.id ? (
@@ -216,8 +218,9 @@ export default function PlanContainer () {
                                             )}
                                         </div>
                                     ))}
-                            </SortableContext>
-                        </div>
+                                </div>
+                            </Droppable>
+                        </SortableContext>
                     ))}
                 </div>
             </DndContext>
