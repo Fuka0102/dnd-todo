@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, res: Response) {
+export async function GET() {
     const supabase = await createClient()
     const { data, error } = await supabase.from('plans').select('*');
 
@@ -12,7 +12,7 @@ export async function GET(req: Request, res: Response) {
     return Response.json(data);
 }
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
     const supabase = await createClient()
     const { id, title, period } = await req.json();
 
