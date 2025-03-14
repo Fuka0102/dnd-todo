@@ -1,6 +1,6 @@
 `use client`;
 
-import React, { ChangeEventHandler, MouseEventHandler, useState } from "react";
+import React, { ChangeEventHandler, MouseEventHandler } from "react";
 
 type PropsType = {
     todoText?: string | number | readonly string[] | undefined,

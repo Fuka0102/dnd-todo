@@ -210,7 +210,7 @@ export default function PlanContainer () {
                                                         value={editedText}
                                                         onChange={(e) => setEditedText(e.target.value)}
                                                     />
-                                                    <button onClick={(e) => onClickEdit(todo.id)}><FiSave /></button>
+                                                    <button onClick={() => onClickEdit(todo.id)}><FiSave /></button>
                                                     <button onClick={onClickEditCancel}><MdOutlineCancel /></button>
                                                 </div>
                                             ) : (
