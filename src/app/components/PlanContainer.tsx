@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { DndContext, DragEndEvent, Active, Over, CollisionDetection, closestCorners, UniqueIdentifier, DragStartEvent, DragOverEvent, useSensor, useSensors, MouseSensor } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
@@ -10,7 +10,20 @@ import { Data, todoData } from '../../data';
 import { FiSave } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
 
-export default function PlanContainer () {
+export type Data = {
+    id: string,
+    name: string,
+    lists: {
+        id: string,
+        title: string,
+        todos: {
+            id: string,
+            title: string
+        }[]
+    }[]
+}
+
+export default function PlanContainer ({planData}) {
     const [data, setData] = useState<Data>(todoData);
     const [id, setActiveId] = useState<UniqueIdentifier | null>(null);
     const [editedItemId, setEditedItemId] = useState<string | null>(null);
@@ -188,6 +201,30 @@ export default function PlanContainer () {
     function onClickEditCancel () {
         setEditedItemId(null);
     }
+
+    function createData () {
+        const todoData: Data = {
+            id: 'todo',
+            name: 'Todo',
+            lists: []
+        }
+
+        {[...Array(planData.period)].map((_value, index) => {
+            const dataIndex = index + 1;
+
+            todoData.lists.push({
+                id: `list${dataIndex}`,
+                title: `List ${dataIndex}`,
+                todos: [],
+            });
+        })}
+
+        console.log(todoData)
+    }
+    
+    useEffect(() => {
+        createData();
+    }, []);
 
     return (
         <>

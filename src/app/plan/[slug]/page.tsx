@@ -18,7 +18,7 @@ export default async function Plan({ params }: { params: Promise<{ slug: string 
                 <h2 className="font-bold text-2xl text-center">{plan.title}</h2>
             </div>
             <div>
-                <PlanContainer />
+                <PlanContainer planData={plan}/>
             </div>
         </div>
     );
