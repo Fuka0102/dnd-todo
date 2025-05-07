@@ -1,6 +1,19 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from "next/server";
 
+type Data = {
+    id: string,
+    name: string,
+    lists: {
+        id: string,
+        title: string,
+        todos: {
+            id: string,
+            title: string
+        }[]
+    }[]
+}
+
 export async function GET() {
     const supabase = await createClient()
     const { data, error } = await supabase.from('plans').select('*');
@@ -16,9 +29,31 @@ export async function POST(req: Request) {
     const supabase = await createClient()
     const { id, title, period } = await req.json();
 
+    const todos: Data = {
+        "id": "PJ1",
+        "name": "Project 1",
+        "lists": [
+        ]
+    }
+
+    function createData () {
+        const parsedPeriod = parseInt(period);
+        {[...Array(parsedPeriod)].map((_value, index) => {
+            const dataIndex = index + 1;
+
+            todos.lists.push({
+                id: `list${dataIndex}`,
+                title: `List ${dataIndex}`,
+                todos: [],
+            });
+        })}
+    }
+
+    createData();
+
     const { data, error } = await supabase
         .from('plans')
-        .insert([{ id, title, period, created_at: new Date().toISOString() }]);
+        .insert([{ id, title, period, todos, created_at: new Date().toISOString() }]);
 
     if (error) {
         return NextResponse.json(error);
