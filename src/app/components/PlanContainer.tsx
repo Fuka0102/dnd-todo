@@ -1,12 +1,11 @@
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { DndContext, DragEndEvent, Active, Over, CollisionDetection, closestCorners, UniqueIdentifier, DragStartEvent, DragOverEvent, useSensor, useSensors, MouseSensor } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 import AddTodo from '../components/AddTodo';
 import Droppable from '../components/Droppable';
-import { Data, todoData } from '../../data';
 import { FiSave } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
 
@@ -24,7 +23,7 @@ export type Data = {
 }
 
 export default function PlanContainer ({planData}) {
-    const [data, setData] = useState<Data>(todoData);
+    const [data, setData] = useState<Data>(planData.todos);
     const [id, setActiveId] = useState<UniqueIdentifier | null>(null);
     const [editedItemId, setEditedItemId] = useState<string | null>(null);
     const [editedText, setEditedText] = useState("");
@@ -153,7 +152,8 @@ export default function PlanContainer ({planData}) {
             title: todoText,
         }
 
-        const firstList = copiedTodoData.lists.find(list => list.id === 'list-sample');
+        // TODO: 'list1'と静的に記載しているのがよくないので修正したい
+        const firstList = copiedTodoData.lists.find(list => list.id === 'list1');
 
         if(!firstList) return;
 
@@ -202,37 +202,13 @@ export default function PlanContainer ({planData}) {
         setEditedItemId(null);
     }
 
-    function createData () {
-        const todoData: Data = {
-            id: 'todo',
-            name: 'Todo',
-            lists: []
-        }
-
-        {[...Array(planData.period)].map((_value, index) => {
-            const dataIndex = index + 1;
-
-            todoData.lists.push({
-                id: `list${dataIndex}`,
-                title: `List ${dataIndex}`,
-                todos: [],
-            });
-        })}
-
-        console.log(todoData)
-    }
-    
-    useEffect(() => {
-        createData();
-    }, []);
-
     return (
         <>
             <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
             <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners} sensors={sensors}>
                 <div className="grid grid-cols-3 gap-4 mt-4">
-                    {data.lists.map((list) => (
-                        <SortableContext id={list.id} items={list.todos} key={list.id}>
+                    {data.lists && data.lists.map((list) => (
+                            <SortableContext id={list.id} items={list.todos} key={list.id}>
                             <Droppable key={list.id}  id={list.id}>
                                 <div className="border min-h-80">
                                     {list.todos.map((todo) => (
@@ -258,7 +234,7 @@ export default function PlanContainer ({planData}) {
                                 </div>
                             </Droppable>
                         </SortableContext>
-                    ))}
+                ))}
                 </div>
             </DndContext>
         </>
