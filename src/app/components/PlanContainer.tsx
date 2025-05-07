@@ -207,10 +207,11 @@ export default function PlanContainer ({planData}) {
             <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
             <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners} sensors={sensors}>
                 <div className="grid grid-cols-3 gap-4 mt-4">
-                    {data.lists && data.lists.map((list) => (
+                    {data.lists && data.lists.map((list, index) => (
                             <SortableContext id={list.id} items={list.todos} key={list.id}>
                             <Droppable key={list.id}  id={list.id}>
-                                <div className="border min-h-80">
+                                <div className="text-lg font-bold text-center">Day {index + 1}</div>
+                                <div className="border min-h-80 mt-2">
                                     {list.todos.map((todo) => (
                                         <div key={todo.id}>
                                             {editedItemId === todo.id ? (
