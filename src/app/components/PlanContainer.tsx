@@ -22,7 +22,7 @@ export type Data = {
     }[]
 }
 
-export default function PlanContainer ({planData}) {
+export default function PlanContainer ({planData, pageId}) {
     const [data, setData] = useState<Data>(planData.todos);
     const [id, setActiveId] = useState<UniqueIdentifier | null>(null);
     const [editedItemId, setEditedItemId] = useState<string | null>(null);
@@ -168,6 +168,21 @@ export default function PlanContainer ({planData}) {
         setTodoText("");
     }
 
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
+        const todos = data;
+
+        const newPlan = await fetch(`${API_URL}/api/${pageId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: pageId, todos }),
+        });
+    };
+
     function onClickDelete (id: string) {
         const copiedTodoData = { ...data };
         let filteredData = [];
@@ -204,40 +219,42 @@ export default function PlanContainer ({planData}) {
 
     return (
         <>
-            <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
-            <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners} sensors={sensors}>
-                <div className="grid grid-cols-3 gap-4 mt-4">
-                    {data.lists && data.lists.map((list, index) => (
-                            <SortableContext id={list.id} items={list.todos} key={list.id}>
-                            <Droppable key={list.id}  id={list.id}>
-                                <div className="text-lg font-bold text-center">Day {index + 1}</div>
-                                <div className="border min-h-80 mt-2">
-                                    {list.todos.map((todo) => (
-                                        <div key={todo.id}>
-                                            {editedItemId === todo.id ? (
-                                                <div className="w-full inline-flex items-center gap-x-3 py-2 px-4 cursor-grab text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-                                                    <input
-                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                        type="text"
-                                                        key={todo.id}
-                                                        placeholder={todo.title}
-                                                        value={editedText}
-                                                        onChange={(e) => setEditedText(e.target.value)}
-                                                    />
-                                                    <button onClick={() => onClickEdit(todo.id)}><FiSave /></button>
-                                                    <button onClick={onClickEditCancel}><MdOutlineCancel /></button>
-                                                </div>
-                                            ) : (
-                                                <PlanItem key={todo.id} id={todo.id} title={todo.title} onClickDelete={()=> onClickDelete(todo.id)} onClickEdit={() => setEditedItemId(todo.id)} />
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </Droppable>
-                        </SortableContext>
-                ))}
-                </div>
-            </DndContext>
+            <form onSubmit={handleSubmit}>
+                <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
+                <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} id={data.id} collisionDetection={customClosestCorners} sensors={sensors}>
+                    <div className="grid grid-cols-3 gap-4 mt-4">
+                        {data.lists && data.lists.map((list, index) => (
+                                <SortableContext id={list.id} items={list.todos} key={list.id}>
+                                <Droppable key={list.id}  id={list.id}>
+                                    <div className="text-lg font-bold text-center">Day {index + 1}</div>
+                                    <div className="border min-h-80 mt-2">
+                                        {list.todos.map((todo) => (
+                                            <div key={todo.id}>
+                                                {editedItemId === todo.id ? (
+                                                    <div className="w-full inline-flex items-center gap-x-3 py-2 px-4 cursor-grab text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
+                                                        <input
+                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                            type="text"
+                                                            key={todo.id}
+                                                            placeholder={todo.title}
+                                                            value={editedText}
+                                                            onChange={(e) => setEditedText(e.target.value)}
+                                                        />
+                                                        <button onClick={() => onClickEdit(todo.id)}><FiSave /></button>
+                                                        <button onClick={onClickEditCancel}><MdOutlineCancel /></button>
+                                                    </div>
+                                                ) : (
+                                                    <PlanItem key={todo.id} id={todo.id} title={todo.title} onClickDelete={()=> onClickDelete(todo.id)} onClickEdit={() => setEditedItemId(todo.id)} />
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </Droppable>
+                            </SortableContext>
+                    ))}
+                    </div>
+                </DndContext>
+            </form>
         </>
     )
 }

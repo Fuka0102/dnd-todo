@@ -20,3 +20,19 @@ export async function GET(req: Request) {
 
     return NextResponse.json(data);
 }
+
+export async function POST(req: Request) {
+    const supabase = await createClient()
+    const { id, todos } = await req.json();
+
+    const { data, error } = await supabase
+        .from('plans')
+        .update([{ todos }])
+        .eq('id', id);
+    
+    if (error) {
+        return NextResponse.json(error);
+    }
+
+    return NextResponse.json(data);
+}
