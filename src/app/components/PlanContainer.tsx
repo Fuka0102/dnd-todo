@@ -208,22 +208,27 @@ export default function PlanContainer({ planData, pageId }) {
       list.todos = filteredData;
     });
 
-    setData(copiedTodoData);
+    // 状態更新を次のレンダリングサイクルに遅延させる
+    requestAnimationFrame(() => {
+      setData(copiedTodoData);
+    });
   }
 
   function onClickEdit(id: string) {
     const copiedTodoData = { ...data };
-
     copiedTodoData.lists.map((list) => {
       list.todos.map((todo) => {
         if (todo.id === id) {
           todo.title = editedText ? editedText : todo.title;
-          setEditedItemId(null);
+
+          // 状態更新を次のレンダリングサイクルに遅延させる
+          requestAnimationFrame(() => {
+            setEditedItemId(null);
+            setData(copiedTodoData);
+          });
         }
       });
     });
-
-    setData(copiedTodoData);
   }
 
   function onClickEditCancel() {
