@@ -9,7 +9,7 @@ export default async function Plan({ params }: { params: Promise<{ slug: string 
 
   const res = await fetch(`${API_URL}/api/${slug}`, {
     next: {
-      revalidate: 10,
+      revalidate: 0,
     },
   });
   const plan = await res.json();
