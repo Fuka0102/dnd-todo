@@ -187,8 +187,6 @@ export default function PlanContainer({ planData, pageId }) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const todos = data;
 
-    console.log('onSubmit', todos);
-
     const newPlan = await fetch(`${API_URL}/api/${pageId}`, {
       method: 'POST',
       headers: {
