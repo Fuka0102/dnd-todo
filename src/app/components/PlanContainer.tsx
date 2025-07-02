@@ -104,18 +104,12 @@ export default function PlanContainer({ planData, pageId }) {
       setData(newData);
 
       // サーバー登録
-      fetch(`${API_URL}/api/${pageId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: pageId, todos: newData }),
-      });
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+      saveTimeout.current = setTimeout(() => saveToServer(newData), 10000);
     } else {
       // 並び替えが発生しなかった場合もサーバー登録したい場合
-      fetch(`${API_URL}/api/${pageId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: pageId, todos: data }),
-      });
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+      saveTimeout.current = setTimeout(() => saveToServer(data), 10000);
     }
   }
 
