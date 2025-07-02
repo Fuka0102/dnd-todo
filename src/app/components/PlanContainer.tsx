@@ -262,7 +262,7 @@ export default function PlanContainer({ planData, pageId }) {
           <div className='grid grid-cols-3 gap-4 mt-4'>
             {data.lists &&
               data.lists.map((list, index) => (
-                <SortableContext id={list.id} items={list.todos} key={list.id}>
+                <SortableContext id={list.id} items={list.todos.map((todo) => todo.id)} key={list.id}>
                   <Droppable key={list.id} id={list.id}>
                     <div className='text-lg font-bold text-center'>Day {index + 1}</div>
                     <div className='border min-h-80 mt-2'>
