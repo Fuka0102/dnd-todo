@@ -43,12 +43,14 @@ export default function PlanContainer({ planData, pageId }) {
   const [editedItemId, setEditedItemId] = useState<string | null>(null);
   const [editedText, setEditedText] = useState('');
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 5 } }));
 
   function getSortedData(event: { active: Active; over: Over | null }) {
     const { active, over } = event;
     if (!over) return;
-    if (active.id === over.id) return;
+    // if (active.id === over.id) return;
 
     const fromSortable = active.data.current?.sortable;
     if (!fromSortable) return;
@@ -78,18 +80,33 @@ export default function PlanContainer({ planData, pageId }) {
     if (!sortedData) return;
 
     const { from, to } = sortedData;
-    if (from.containerId !== to.containerId) return;
+    if (from.containerId === to.containerId) {
+      const list = data.lists.find((list) => list.id == from.containerId);
+      if (!list) return;
 
-    const list = data.lists.find((list) => list.id == from.containerId);
-    if (!list) return;
+      const newTodos = arrayMove(list.todos, from.index, to.index);
+      const newLists = data.lists.map((list) => {
+        if (list.id === from.containerId) return { ...list, todos: newTodos };
+        return list;
+      });
 
-    const newTodos = arrayMove(list.todos, from.index, to.index);
-    const newLists = data.lists.map((list) => {
-      if (list.id === from.containerId) return { ...list, todos: newTodos };
-      return list;
-    });
+      const newData = { ...data, lists: newLists };
+      setData(newData);
 
-    setData({ ...data, lists: newLists });
+      // サーバー登録
+      fetch(`${API_URL}/api/${pageId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: pageId, todos: newData }),
+      });
+    } else {
+      // 並び替えが発生しなかった場合もサーバー登録したい場合
+      fetch(`${API_URL}/api/${pageId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: pageId, todos: data }),
+      });
+    }
   }
 
   function handleDragOver(event: DragOverEvent) {
