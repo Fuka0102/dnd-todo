@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -43,9 +43,19 @@ export default function PlanContainer({ planData, pageId }) {
   const [editedItemId, setEditedItemId] = useState<string | null>(null);
   const [editedText, setEditedText] = useState('');
 
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 5 } }));
+
+  // サーバー保存関数
+  const saveToServer = (latestData: Data) => {
+    fetch(`${API_URL}/api/${pageId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: pageId, todos: latestData }),
+    });
+  };
 
   function getSortedData(event: { active: Active; over: Over | null }) {
     const { active, over } = event;
