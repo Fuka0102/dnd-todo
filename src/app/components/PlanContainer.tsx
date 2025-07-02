@@ -207,13 +207,7 @@ export default function PlanContainer({ planData, pageId }) {
 
     const todos = data;
 
-    const newPlan = await fetch(`${API_URL}/api/${pageId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id: pageId, todos }),
-    });
+    saveToServer(todos);
   };
 
   function onClickDelete(id: string) {
