@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -43,12 +43,24 @@ export default function PlanContainer({ planData, pageId }) {
   const [editedItemId, setEditedItemId] = useState<string | null>(null);
   const [editedText, setEditedText] = useState('');
 
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 5 } }));
+
+  // サーバー保存関数
+  const saveToServer = (latestData: Data) => {
+    fetch(`${API_URL}/api/${pageId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: pageId, todos: latestData }),
+    });
+  };
 
   function getSortedData(event: { active: Active; over: Over | null }) {
     const { active, over } = event;
     if (!over) return;
-    if (active.id === over.id) return;
+    // if (active.id === over.id) return;
 
     const fromSortable = active.data.current?.sortable;
     if (!fromSortable) return;
@@ -78,18 +90,27 @@ export default function PlanContainer({ planData, pageId }) {
     if (!sortedData) return;
 
     const { from, to } = sortedData;
-    if (from.containerId !== to.containerId) return;
+    if (from.containerId === to.containerId) {
+      const list = data.lists.find((list) => list.id == from.containerId);
+      if (!list) return;
 
-    const list = data.lists.find((list) => list.id == from.containerId);
-    if (!list) return;
+      const newTodos = arrayMove(list.todos, from.index, to.index);
+      const newLists = data.lists.map((list) => {
+        if (list.id === from.containerId) return { ...list, todos: newTodos };
+        return list;
+      });
 
-    const newTodos = arrayMove(list.todos, from.index, to.index);
-    const newLists = data.lists.map((list) => {
-      if (list.id === from.containerId) return { ...list, todos: newTodos };
-      return list;
-    });
+      const newData = { ...data, lists: newLists };
+      setData(newData);
 
-    setData({ ...data, lists: newLists });
+      // サーバー登録
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+      saveTimeout.current = setTimeout(() => saveToServer(newData), 10000);
+    } else {
+      // 並び替えが発生しなかった場合もサーバー登録したい場合
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+      saveTimeout.current = setTimeout(() => saveToServer(data), 10000);
+    }
   }
 
   function handleDragOver(event: DragOverEvent) {
@@ -184,16 +205,9 @@ export default function PlanContainer({ planData, pageId }) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const todos = data;
 
-    const newPlan = await fetch(`${API_URL}/api/${pageId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id: pageId, todos }),
-    });
+    saveToServer(todos);
   };
 
   function onClickDelete(id: string) {
@@ -248,7 +262,7 @@ export default function PlanContainer({ planData, pageId }) {
           <div className='grid grid-cols-3 gap-4 mt-4'>
             {data.lists &&
               data.lists.map((list, index) => (
-                <SortableContext id={list.id} items={list.todos} key={list.id}>
+                <SortableContext id={list.id} items={list.todos.map((todo) => todo.id)} key={list.id}>
                   <Droppable key={list.id} id={list.id}>
                     <div className='text-lg font-bold text-center'>Day {index + 1}</div>
                     <div className='border min-h-80 mt-2'>
