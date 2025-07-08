@@ -23,8 +23,11 @@ import AddTodo from '../components/AddTodo';
 import Droppable from '../components/Droppable';
 import { FiSave } from 'react-icons/fi';
 import { MdOutlineCancel } from 'react-icons/md';
+import { Database } from '@/types/database.types';
 
-export type Data = {
+type Plan = Database['public']['Tables']['plans']['Row'];
+
+export type todosData = {
   id: string;
   name: string;
   lists: {
@@ -37,8 +40,19 @@ export type Data = {
   }[];
 };
 
-export default function PlanContainer({ planData, pageId }) {
-  const [data, setData] = useState<Data>(planData.todos);
+type PlanContainerProps = {
+  planData: Plan;
+  pageId: string;
+};
+
+export default function PlanContainer({ planData, pageId } : PlanContainerProps) {
+  const [data, setData] = useState<todosData>(
+    (planData.todos as todosData) ?? {
+      id: '',
+      name: '',
+      lists: [],
+    }
+  );
   const [id, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [editedItemId, setEditedItemId] = useState<string | null>(null);
   const [editedText, setEditedText] = useState('');
@@ -49,7 +63,7 @@ export default function PlanContainer({ planData, pageId }) {
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 5 } }));
 
   // サーバー保存関数
-  const saveToServer = (latestData: Data) => {
+  const saveToServer = (latestData: todosData) => {
     fetch(`${API_URL}/api/${pageId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -91,7 +105,7 @@ export default function PlanContainer({ planData, pageId }) {
 
     const { from, to } = sortedData;
     if (from.containerId === to.containerId) {
-      const list = data.lists.find((list) => list.id == from.containerId);
+      const list = data!.lists.find((list) => list.id == from.containerId);
       if (!list) return;
 
       const newTodos = arrayMove(list.todos, from.index, to.index);
