@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { RiDeleteBinLine } from 'react-icons/ri';
 import { Database } from '@/types/database.types';
 
 type Plan = Database['public']['Tables']['plans']['Row'];
@@ -17,7 +18,7 @@ export default function PlanCard ({ planData }: {planData: Plan }) {
     };
 
     return (
-        <li>
+        <li className="relative">
             <Link href={`plan/${planData.id}`} className="block max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
                 <div className="h-52 overflow-hidden">
                 {/* todo: 画像はサーバーから取得したい */}
@@ -31,7 +32,11 @@ export default function PlanCard ({ planData }: {planData: Plan }) {
                 </div>
                 </div>
             </Link>
-            <div onClick={() => deletePlan(planData.id)}>プランを削除</div>
+            <div className="absolute bottom-6 right-4 bg-stone-500 w-8 h-8 rounded-full flex justify-center">
+                <button type="button" onClick={() => deletePlan(planData.id)}>
+                    <RiDeleteBinLine />
+                </button>
+            </div>
         </li>
     )
 }
