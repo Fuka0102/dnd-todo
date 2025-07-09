@@ -6,6 +6,16 @@ import { Database } from '@/types/database.types';
 type Plan = Database['public']['Tables']['plans']['Row'];
 
 export default function PlanCard ({ planData }: {planData: Plan }) {
+
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    const deletePlan = (planId: number) => {
+        fetch(`${API_URL}/api/`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: planId }),
+        });
+    };
+
     return (
         <li>
             <Link href={`plan/${planData.id}`} className="block max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
@@ -21,6 +31,7 @@ export default function PlanCard ({ planData }: {planData: Plan }) {
                 </div>
                 </div>
             </Link>
+            <div onClick={() => deletePlan(planData.id)}>プランを削除</div>
         </li>
     )
 }

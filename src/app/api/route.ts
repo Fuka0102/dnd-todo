@@ -61,3 +61,15 @@ export async function POST(req: Request) {
 
     return NextResponse.json(data);
 }
+
+export async function DELETE(req: Request) {
+    const supabase = await createClient()
+    const { id } = await req.json();
+    const { data, error } = await supabase.from('plans').delete().eq('id', id);
+
+    if (error) {
+        return NextResponse.json(error);
+    }
+
+    return Response.json(data);
+}
