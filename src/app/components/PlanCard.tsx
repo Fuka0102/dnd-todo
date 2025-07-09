@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation"; 
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { Database } from '@/types/database.types';
 
@@ -8,13 +9,17 @@ type Plan = Database['public']['Tables']['plans']['Row'];
 
 export default function PlanCard ({ planData }: {planData: Plan }) {
 
+    const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
     const deletePlan = (planId: number) => {
         fetch(`${API_URL}/api/`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: planId }),
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: planId }),
         });
+
+        router.refresh();
     };
 
     return (
