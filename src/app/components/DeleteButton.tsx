@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { RiDeleteBinLine } from 'react-icons/ri';
 
-export default function DeleteButton ({ pageId, buttonPosition, size, height, iconSize}: {pageId: string, buttonPosition: string, size: string, height: string, iconSize: string }) {
+export default function DeleteButton ({ pageId, buttonPosition, iconSize}: {pageId: string, buttonPosition: string, iconSize: string }) {
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,10 +18,8 @@ export default function DeleteButton ({ pageId, buttonPosition, size, height, ic
     };
 
     return (
-        <div className={`${buttonPosition} bg-stone-500 w-${size} h-${height} rounded-full flex justify-center`}>
-            <button type="button" onClick={() => deletePlan(parseInt(pageId))}>
-                <RiDeleteBinLine className={iconSize} />
-            </button>
-        </div>
+        <button type="button" className={`${buttonPosition} bg-black p-4 rounded-full flex justify-center`} onClick={() => deletePlan(parseInt(pageId))}>
+            <RiDeleteBinLine className={`${iconSize} text-white`} />
+        </button>
     )
 }

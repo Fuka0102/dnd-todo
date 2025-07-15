@@ -37,7 +37,7 @@ export default function PlanCard ({ planData }: {planData: Plan }) {
                 </div>
                 </div>
             </Link>
-            <div className="absolute bottom-6 right-4 bg-stone-500 w-8 h-8 rounded-full flex justify-center">
+            <div className="absolute bottom-6 right-4 bg-black w-8 h-8 rounded-full flex justify-center text-white">
                 <button type="button" onClick={() => deletePlan(planData.id)}>
                     <RiDeleteBinLine />
                 </button>

@@ -22,7 +22,7 @@ export default async function Plan({ params }: { params: Promise<{ slug: string 
       </div>
       <div>
         <PlanContainer planData={plan} pageId={slug} />
-        <DeleteButton pageId={slug} buttonPosition='fixed bottom-6 right-4' size='16' height='16' iconSize='text-2xl' />
+        <DeleteButton pageId={slug} buttonPosition='fixed bottom-6 right-4' iconSize='text-2xl' />
       </div>
     </div>
   );
