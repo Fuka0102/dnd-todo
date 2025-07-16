@@ -262,10 +262,30 @@ export default function PlanContainer({ planData, pageId } : PlanContainerProps)
     setEditedItemId(null);
   }
 
+  function onClickAddContainer() {
+    const newListId = `list-${Date.now()}`;
+    const newList = {
+      id: newListId,
+      title: `List ${data.lists.length + 1}`,
+      todos: [],
+    };
+
+    const newData = {
+      ...data,
+      lists: [...data.lists, newList],
+    };
+
+    setData(newData);
+    saveToServer(newData);
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit}>
+        <div className='flex items-center justify-between'>
         <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
+          <AddContainerButton onAddList={onClickAddContainer} />
+        </div>
         <DndContext
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
