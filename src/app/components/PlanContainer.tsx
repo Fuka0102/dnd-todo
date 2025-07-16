@@ -279,12 +279,21 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
     saveToServer(newData);
   }
 
+  function onClickDeleteContainer() {
+    const copiedData = { ...data };
+    copiedData.lists.pop();
+
+    setData(copiedData);
+    saveToServer(copiedData);
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit}>
         <div className='flex items-center justify-between'>
           <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
           <AddContainerButton onAddList={onClickAddContainer} />
+          <AddContainerButton onAddList={onClickDeleteContainer} />
         </div>
         <DndContext
           onDragStart={handleDragStart}
