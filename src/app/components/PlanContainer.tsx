@@ -281,6 +281,12 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   }
 
   function onClickDeleteContainer() {
+    const shouldDelete = window.confirm(
+      '最終日のコンテナが消えてしまいますがよろしいですか？n（todoがある場合、一緒に削除されます。ntodoを消したくない場合は、最終日より前のコンテナに移してください）'
+    );
+
+    if (!shouldDelete) return;
+
     const copiedData = { ...data };
     copiedData.lists.pop();
 
