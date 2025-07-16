@@ -22,6 +22,7 @@ import PlanItem from './PlanItem';
 import AddTodo from '../components/AddTodo';
 import Droppable from '../components/Droppable';
 import AddContainerButton from './AddContainerButton';
+import DeleteContainerButton from './DeleteContainerButton';
 import { FiSave } from 'react-icons/fi';
 import { MdOutlineCancel } from 'react-icons/md';
 import { Database } from '@/types/database.types';
@@ -292,8 +293,10 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
       <form onSubmit={handleSubmit}>
         <div className='flex items-center justify-between'>
           <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
-          <AddContainerButton onAddList={onClickAddContainer} />
-          <AddContainerButton onAddList={onClickDeleteContainer} />
+          <div className='flex items-center justify-between'>
+            <AddContainerButton onAddList={onClickAddContainer} />
+            <DeleteContainerButton onDeleteList={onClickDeleteContainer} />
+          </div>
         </div>
         <DndContext
           onDragStart={handleDragStart}
