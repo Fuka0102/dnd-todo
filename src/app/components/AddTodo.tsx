@@ -1,6 +1,6 @@
 /** @format */
 
-"use client";
+'use client';
 
 import React, { ChangeEventHandler, MouseEventHandler } from 'react';
 
@@ -14,7 +14,7 @@ export default function AddTodo({ todoText, onChangeTodoText, onClickAdd }: Prop
   return (
     <div className='flex'>
       <input
-        className='block py-1.5 px-0 w-1/5 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+        className='block py-1.5 px-0 w-56 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
         value={todoText}
         onChange={onChangeTodoText}
         placeholder='todo内容を入力'
