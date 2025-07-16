@@ -21,6 +21,7 @@ import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 import AddTodo from '../components/AddTodo';
 import Droppable from '../components/Droppable';
+import AddContainerButton from './AddContainerButton';
 import { FiSave } from 'react-icons/fi';
 import { MdOutlineCancel } from 'react-icons/md';
 import { Database } from '@/types/database.types';
