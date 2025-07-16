@@ -46,7 +46,7 @@ type PlanContainerProps = {
   pageId: string;
 };
 
-export default function PlanContainer({ planData, pageId } : PlanContainerProps) {
+export default function PlanContainer({ planData, pageId }: PlanContainerProps) {
   const [data, setData] = useState<todosData>(
     (planData.todos as todosData) ?? {
       id: '',
@@ -283,7 +283,7 @@ export default function PlanContainer({ planData, pageId } : PlanContainerProps)
     <>
       <form onSubmit={handleSubmit}>
         <div className='flex items-center justify-between'>
-        <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
+          <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
           <AddContainerButton onAddList={onClickAddContainer} />
         </div>
         <DndContext
