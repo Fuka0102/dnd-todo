@@ -7,20 +7,16 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 export default function DeleteButton({
   pageId,
   buttonPosition,
-  size,
-  height,
   iconSize,
 }: {
   pageId: string;
   buttonPosition: string;
-  size: string;
-  height: string;
   iconSize: string;
 }) {
   const router = useRouter();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const deletePlan = (planId: number) => {
+  const deletePlan = (planId: string) => {
     const shouldDelete = window.confirm('本プラン自体が全て削除されますがよろしいですか？');
 
     if (!shouldDelete) return;
@@ -36,8 +32,8 @@ export default function DeleteButton({
   };
 
   return (
-    <div className={`${buttonPosition} bg-stone-500 w-${size} h-${height} rounded-full flex justify-center`}>
-      <button type='button' onClick={() => deletePlan(parseInt(pageId))}>
+    <div className={`${buttonPosition} bg-stone-500 w-8 h-8 rounded-full flex justify-center`}>
+      <button type='button' onClick={() => deletePlan(pageId)}>
         <RiDeleteBinLine className={iconSize} />
       </button>
     </div>
