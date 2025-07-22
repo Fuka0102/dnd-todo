@@ -21,6 +21,8 @@ import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 import AddTodo from '../components/AddTodo';
 import Droppable from '../components/Droppable';
+import AddContainerButton from './AddContainerButton';
+import DeleteContainerButton from './DeleteContainerButton';
 import { FiSave } from 'react-icons/fi';
 import { MdOutlineCancel } from 'react-icons/md';
 import { Database } from '@/types/database.types';
@@ -45,7 +47,7 @@ type PlanContainerProps = {
   pageId: string;
 };
 
-export default function PlanContainer({ planData, pageId } : PlanContainerProps) {
+export default function PlanContainer({ planData, pageId }: PlanContainerProps) {
   const [data, setData] = useState<todosData>(
     (planData.todos as todosData) ?? {
       id: '',
@@ -261,10 +263,47 @@ export default function PlanContainer({ planData, pageId } : PlanContainerProps)
     setEditedItemId(null);
   }
 
+  function onClickAddContainer() {
+    const newListId = `list-${Date.now()}`;
+    const newList = {
+      id: newListId,
+      title: `List ${data.lists.length + 1}`,
+      todos: [],
+    };
+
+    const newData = {
+      ...data,
+      lists: [...data.lists, newList],
+    };
+
+    setData(newData);
+    saveToServer(newData);
+  }
+
+  function onClickDeleteContainer() {
+    const shouldDelete = window.confirm(
+      '最終日のコンテナが消えてしまいますがよろしいですか？n（todoがある場合、一緒に削除されます。ntodoを消したくない場合は、最終日より前のコンテナに移してください）'
+    );
+
+    if (!shouldDelete) return;
+
+    const copiedData = { ...data };
+    copiedData.lists.pop();
+
+    setData(copiedData);
+    saveToServer(copiedData);
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
+        <div className='flex items-center justify-between'>
+          <AddTodo todoText={todoText} onChangeTodoText={onChangeTodoText} onClickAdd={onClickAdd} />
+          <div className='flex items-center justify-between'>
+            <AddContainerButton onAddList={onClickAddContainer} />
+            <DeleteContainerButton onDeleteList={onClickDeleteContainer} />
+          </div>
+        </div>
         <DndContext
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
