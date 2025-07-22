@@ -1,6 +1,5 @@
 'use client';
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function CreatePlan () {
     const router = useRouter();
@@ -12,6 +11,8 @@ export default function CreatePlan () {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+    const id = uuidv4();
 
         const newPlan = await fetch(`${API_URL}/api`, {
             method: "POST",
