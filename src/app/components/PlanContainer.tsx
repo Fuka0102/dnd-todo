@@ -23,6 +23,7 @@ import AddTodo from '../components/AddTodo';
 import Droppable from '../components/Droppable';
 import AddContainerButton from './AddContainerButton';
 import DeleteContainerButton from './DeleteContainerButton';
+import SaveResult from './SaveResult';
 import { FiSave } from 'react-icons/fi';
 import { MdOutlineCancel } from 'react-icons/md';
 import { Database } from '@/types/database.types';
@@ -70,7 +71,16 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: pageId, todos: latestData }),
-    });
+    })
+      .then(response => {
+        if (!response.ok) {
+          console.error('サーバーエラー');
+        }
+
+      })
+      .catch(error => {
+        console.error('通信に失敗しました', error);
+      });
   };
 
   function getSortedData(event: { active: Active; over: Over | null }) {
