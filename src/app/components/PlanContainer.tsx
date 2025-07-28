@@ -59,6 +59,8 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   const [id, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [editedItemId, setEditedItemId] = useState<string | null>(null);
   const [editedText, setEditedText] = useState('');
+  const [isStartToSave, setIsStartToSave] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -67,6 +69,8 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
   // サーバー保存関数
   const saveToServer = (latestData: todosData) => {
+    setIsStartToSave(true);
+
     fetch(`${API_URL}/api/${pageId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -76,10 +80,12 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
         if (!response.ok) {
           console.error('サーバーエラー');
         }
-
+        setIsCompleted(true);
+        setIsStartToSave(false);
       })
       .catch(error => {
         console.error('通信に失敗しました', error);
+        setIsStartToSave(false);
       });
   };
 
