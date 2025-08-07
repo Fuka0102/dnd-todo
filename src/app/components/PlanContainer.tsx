@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -61,6 +61,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   const [editedText, setEditedText] = useState('');
   const [isStartToSave, setIsStartToSave] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
 
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -69,7 +70,9 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
   // サーバー保存関数
   const saveToServer = (latestData: todosData) => {
-    setIsStartToSave(true);
+    if (!isStartToSave) {
+      setIsStartToSave(true);
+    }
 
     fetch(`${API_URL}/api/${pageId}`, {
       method: 'POST',
@@ -77,17 +80,42 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
       body: JSON.stringify({ id: pageId, todos: latestData }),
     })
       .then(response => {
+        setIsStartToSave(false);
+
         if (!response.ok) {
           console.error('サーバーエラー');
+          setIsFailed(true)
+          return;
         }
+
         setIsCompleted(true);
-        setIsStartToSave(false);
       })
       .catch(error => {
-        console.error('通信に失敗しました', error);
         setIsStartToSave(false);
+        console.error('通信に失敗しました', error);
+        setIsFailed(true)
       });
   };
+
+  useEffect(() => {
+    if (isCompleted) {
+      const timer = setTimeout(() => {
+        setIsCompleted(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isCompleted]);
+
+    useEffect(() => {
+    if (isFailed) {
+      const timer = setTimeout(() => {
+        setIsFailed(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isFailed]);
 
   function getSortedData(event: { active: Active; over: Over | null }) {
     const { active, over } = event;
@@ -137,11 +165,13 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
       // サーバー登録
       if (saveTimeout.current) clearTimeout(saveTimeout.current);
-      saveTimeout.current = setTimeout(() => saveToServer(newData), 10000);
+          setIsStartToSave(true);
+      saveTimeout.current = setTimeout(() => saveToServer(newData), 3000);
     } else {
       // 並び替えが発生しなかった場合もサーバー登録したい場合
       if (saveTimeout.current) clearTimeout(saveTimeout.current);
-      saveTimeout.current = setTimeout(() => saveToServer(data), 10000);
+      setIsStartToSave(true);
+      saveTimeout.current = setTimeout(() => saveToServer(data), 3000);
     }
   }
 
@@ -320,6 +350,27 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
             <DeleteContainerButton onDeleteList={onClickDeleteContainer} />
           </div>
         </div>
+        {isStartToSave && (
+            <div className='flex items-center justify-center mt-4'>
+              <div className="text-blue-600 text-center font-bold">
+                  <p>Saving...</p>
+              </div>
+            </div>
+        )}
+          {!isStartToSave && isCompleted && (
+              <div className='flex items-center justify-center mt-4'>
+                <div className="text-green-600 text-center font-bold">
+                    <p>Save successful!</p>
+                </div>
+              </div>
+          )}
+          {!isStartToSave && isFailed && (
+              <div className='flex items-center justify-center mt-4'>
+                <div className="text-red-600 text-center font-bold">
+                    <p>Save failed. Please try again.</p>
+                </div>
+              </div>
+          )}
         <DndContext
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
