@@ -21,6 +21,7 @@ import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 import AddTodo from '../components/AddTodo';
 import Droppable from '../components/Droppable';
+import TimeSlot from './TimeSlot';
 import AddContainerButton from './AddContainerButton';
 import DeleteContainerButton from './DeleteContainerButton';
 import { FiSave } from 'react-icons/fi';
@@ -319,6 +320,21 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
               data.lists.map((list, index) => (
                   <Droppable key={list.id} id={list.id}>
                     <div className='text-lg font-bold text-center'>Day {index + 1}</div>
+                      {timeSlots.map((time) => {
+                         const todo = list.todos[time];
+
+                         const slotId = `${list.id}-${time}`;
+
+                          return (
+      // ここにDroppableなコンポーネント(TimeSlot)を置きます
+      <TimeSlot key={slotId} id={slotId}>
+        <span className="time-label">{time}</span>
+        
+        {/* もし、その時間にTODOが存在すれば、DraggableなTODOコンポーネントを描画します */}
+        {todo ? <TodoItem todo={todo} /> : null}
+      </TimeSlot>
+    );
+                      })}
                     <div className='border min-h-80 mt-2'>
                       {list.todos.map((todo) => (
                         <div key={todo.id}>
