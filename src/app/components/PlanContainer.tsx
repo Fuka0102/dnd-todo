@@ -327,7 +327,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
                         return (
                           // ここにDroppableなコンポーネント(TimeSlot)を置きます
-                          <TimeSlot key={slotId} id={slotId}>
+                          <TimeSlot key={slotId} id={slotId} listId={list.id} time={time}>
                             <span className="time-label">{time}</span>
                             {/* もし、その時間にTODOが存在すれば、DraggableなTODOコンポーネントを描画します */}
                             {todo ? 
