@@ -69,7 +69,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
   // サーバー保存関数
   const saveToServer = (latestData: todosData) => {
-    fetch(`http://localhost:3002/plans${pageId}`, {
+    fetch(`http://localhost:3002/plans/${pageId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: pageId, todos: latestData }),
@@ -320,53 +320,47 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
               data.lists.map((list, index) => (
                   <Droppable key={list.id} id={list.id}>
                     <div className='text-lg font-bold text-center'>Day {index + 1}</div>
-                      {timeSlots.map((time) => {
-                         const todo = list.todos[time];
+                    {timeSlots.map((time) => {
+                        const todo = list.todos[time];
+                        const slotId = `${list.id}-${time}`;
 
-                         const slotId = `${list.id}-${time}`;
-
-                          return (
-      // ここにDroppableなコンポーネント(TimeSlot)を置きます
-      <TimeSlot key={slotId} id={slotId}>
-        <span className="time-label">{time}</span>
-        
-        {/* もし、その時間にTODOが存在すれば、DraggableなTODOコンポーネントを描画します */}
-        {todo ? <TodoItem todo={todo} /> : null}
-      </TimeSlot>
-    );
-                      })}
-                    <div className='border min-h-80 mt-2'>
-                      {list.todos.map((todo) => (
-                        <div key={todo.id}>
-                          {editedItemId === todo.id ? (
-                            <div className='w-full inline-flex items-center gap-x-3 py-2 px-4 cursor-grab text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg'>
-                              <input
-                                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                type='text'
-                                key={todo.id}
-                                placeholder={todo.title}
-                                value={editedText}
-                                onChange={(e) => setEditedText(e.target.value)}
-                              />
-                              <button onClick={() => onClickEdit(todo.id)}>
-                                <FiSave />
-                              </button>
-                              <button onClick={onClickEditCancel}>
-                                <MdOutlineCancel />
-                              </button>
-                            </div>
-                          ) : (
-                            <PlanItem
-                              key={todo.id}
-                              id={todo.id}
-                              title={todo.title}
-                              onClickDelete={() => onClickDelete(todo.id)}
-                              onClickEdit={() => setEditedItemId(todo.id)}
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </div>
+                        return (
+                          // ここにDroppableなコンポーネント(TimeSlot)を置きます
+                          <TimeSlot key={slotId} id={slotId}>
+                            <span className="time-label">{time}</span>
+                            {/* もし、その時間にTODOが存在すれば、DraggableなTODOコンポーネントを描画します */}
+                            {todo ? 
+                            <>
+                              {editedItemId === todo.id ? (
+                                <div className='w-full inline-flex items-center gap-x-3 py-2 px-4 cursor-grab text-sm font-medium bg-white border border-gray-200 text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg'>
+                                  <input
+                                    className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    type='text'
+                                    key={todo.id}
+                                    placeholder={todo.title}
+                                    value={editedText}
+                                    onChange={(e) => setEditedText(e.target.value)}
+                                  />
+                                  <button onClick={() => onClickEdit(todo.id)}>
+                                    <FiSave />
+                                  </button>
+                                  <button onClick={onClickEditCancel}>
+                                    <MdOutlineCancel />
+                                  </button>
+                                </div>
+                              ) : (
+                                <PlanItem key={todo.id}
+                                    id={todo.id}
+                                    title={todo.title}
+                                    onClickDelete={() => onClickDelete(todo.id)}
+                                    onClickEdit={() => setEditedItemId(todo.id)}
+                                  />
+                              )}
+                            </>
+                            : null}
+                          </TimeSlot>
+                        );
+                    })}
                   </Droppable>
               ))}
           </div>
