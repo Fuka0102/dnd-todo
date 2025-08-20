@@ -16,6 +16,7 @@ import {
   useSensor,
   useSensors,
   MouseSensor,
+  closestCenter
 } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
@@ -313,7 +314,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
           id={data.id}
-          collisionDetection={customClosestCorners}
+          collisionDetection={closestCenter}
           sensors={sensors}
         >
           <div className='grid grid-cols-3 gap-4 mt-4'>
