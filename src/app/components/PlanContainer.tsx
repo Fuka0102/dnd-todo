@@ -81,7 +81,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
     if (!over) return;
     // if (active.id === over.id) return;
 
-    const fromSortable = active.data.current?.sortable;
+    const fromSortable = active.data.current?.parent;
     if (!fromSortable) return;
 
     const toSortable = over.data.current?.sortable;
@@ -106,6 +106,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   function handleDragEnd(event: DragEndEvent) {
     setActiveId(null);
     const sortedData = getSortedData(event);
+
     if (!sortedData) return;
 
     const { from, to } = sortedData;
@@ -352,6 +353,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
                                 <PlanItem key={todo.id}
                                     id={todo.id}
                                     title={todo.title}
+                                    timeSlotId={slotId}
                                     onClickDelete={() => onClickDelete(todo.id)}
                                     onClickEdit={() => setEditedItemId(todo.id)}
                                   />

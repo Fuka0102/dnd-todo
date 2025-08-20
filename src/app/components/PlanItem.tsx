@@ -10,15 +10,17 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 export default function PlanItem({
   id,
   title,
+  timeSlotId,
   onClickDelete,
   onClickEdit,
 }: {
   id: string;
   title: string;
+  timeSlotId: string;
   onClickDelete: MouseEventHandler<HTMLElement>;
   onClickEdit: MouseEventHandler<HTMLElement>;
 }) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({ id });
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({ id, data: { parent: timeSlotId } });
 
   const style = transform
     ? {
