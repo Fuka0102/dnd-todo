@@ -8,7 +8,7 @@ export default async function Plan({ params }: { params: Promise<{ slug: string 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { slug } = await params;
 
-  const res = await fetch(`${API_URL}/api/${slug}`, {
+  const res = await fetch(`http://localhost:3002/plans/${slug}`, {
     next: {
       revalidate: 0,
     },

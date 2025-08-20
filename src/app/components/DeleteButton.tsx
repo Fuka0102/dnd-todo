@@ -21,7 +21,7 @@ export default function DeleteButton({
 
     if (!shouldDelete) return;
 
-    fetch(`${API_URL}/api/${pageId}`, {
+    fetch(`http://localhost:3002/plans/${pageId}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: planId }),

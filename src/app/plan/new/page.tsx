@@ -18,7 +18,7 @@ export default function CreatePlan() {
 
     const id = uuidv4();
 
-    const newPlan = await fetch(`${API_URL}/api`, {
+    const newPlan = await fetch(`http://localhost:3002/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
