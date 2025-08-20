@@ -3,7 +3,7 @@
 'use client';
 
 import React, { MouseEventHandler } from 'react';
-import { useSortable } from '@dnd-kit/sortable';
+import { useDraggable } from '@dnd-kit/core';
 import { FiEdit2 } from 'react-icons/fi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 
@@ -18,7 +18,7 @@ export default function PlanItem({
   onClickDelete: MouseEventHandler<HTMLElement>;
   onClickEdit: MouseEventHandler<HTMLElement>;
 }) {
-  const { attributes, listeners, setNodeRef, transform } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({ id });
 
   const style = transform
     ? {
