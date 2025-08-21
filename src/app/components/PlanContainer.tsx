@@ -79,26 +79,6 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
     });
   };
 
-  function getSortedData(event: { active: Active; over: Over | null }) {
-    const { active, over } = event;
-    if (!over) return;
-    // if (active.id === over.id) return;
-
-    const fromSortable = active.data.current?.parent;
-    if (!fromSortable) return;
-
-    const toSortable = over.data.current?.sortable;
-    const notToSortable = {
-      containerId: over.id,
-      index: NaN,
-      items: NaN,
-    };
-
-    return {
-      from: fromSortable,
-      to: toSortable ?? notToSortable,
-    };
-  }
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
