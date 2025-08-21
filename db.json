@@ -12,7 +12,7 @@
                         "id": "list1",
                         "title": "Day 1",
                         "todos": {
-                            "08:00": {"id":"todo2","title":"ホテルで朝食"},
+                            "8:00": {"id":"todo2","title":"ホテルで朝食"},
                             "10:00": {"id":"todo-aaa","title":"明洞でショッピング"}
                         }
                     },
