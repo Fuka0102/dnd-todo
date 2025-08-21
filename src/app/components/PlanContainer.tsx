@@ -87,33 +87,65 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   }
 
   function handleDragEnd(event: DragEndEvent) {
-    setActiveId(null);
-    const sortedData = getSortedData(event);
+    const { active, over } = event;
 
-    if (!sortedData) return;
-
-    const { from, to } = sortedData;
-    if (from.containerId === to.containerId) {
-      const list = data!.lists.find((list) => list.id == from.containerId);
-      if (!list) return;
-
-      const newTodos = arrayMove(list.todos, from.index, to.index);
-      const newLists = data.lists.map((list) => {
-        if (list.id === from.containerId) return { ...list, todos: newTodos };
-        return list;
-      });
-
-      const newData = { ...data, lists: newLists };
-      setData(newData);
-
-      // サーバー登録
-      if (saveTimeout.current) clearTimeout(saveTimeout.current);
-      saveTimeout.current = setTimeout(() => saveToServer(newData), 10000);
-    } else {
-      // 並び替えが発生しなかった場合もサーバー登録したい場合
-      if (saveTimeout.current) clearTimeout(saveTimeout.current);
-      saveTimeout.current = setTimeout(() => saveToServer(data), 10000);
+    // 1. ドロップできるエリアの外でドロップされた場合は何もしない
+    if (!over || active.id === over.id) {
+      return;
     }
+
+    const activeId = active.id; // ドラッグされたTODOのID
+    const overId = over.id;     // ドロップされたタイムスロットのID (例: "list1-09:00")
+
+    // 2. plansのstateを更新する
+    setData(prevPlans => {
+
+      let draggedTodo = null;
+      let sourceList = null; 
+      let targetList = null;
+      let sourceTime = null;
+
+      // 3. まず、ドラッグされたTODOが「元々どこにいたか」を探し、データを取り出す
+      for (const plan of data.lists) {
+        for (const time in plan.todos) {
+            if (plan.todos[time]?.id === activeId) {
+              draggedTodo = plan.todos[time];
+              
+              // 元の場所を記録しておく
+              sourceList = plan;
+              sourceTime = time;
+              draggedTodo = plan.todos[time];
+              break;
+            }
+        }
+        if (sourceList) break;
+      }
+
+      // 4. overId (例: "list1-09:00") から、ドロップ先のDay(list)のIDと時間を特定
+      const [targetListId, targetTime] = String(overId).split('-');
+      targetList = data.lists.find(list => list.id === targetListId);
+
+      if (!draggedTodo || !sourceList || !targetList || !targetTime) {
+        console.warn("必要な情報が不足しているため、更新をキャンセルしました。");
+        return data; // 何も変更せずに元のデータを返す
+      }
+
+      const newPlans = JSON.parse(JSON.stringify(prevPlans.lists));
+
+      // 5. 実際の更新処理
+      const finalSourceList = newPlans.find((list: { id: string; }) => list.id === sourceList.id);
+      const finalTargetList = newPlans.find((list: { id: string; }) => list.id === targetList.id);
+
+      // 元の場所から削除
+      if (sourceTime !== null) {
+        delete finalSourceList.todos[sourceTime];
+      }
+
+      // 新しい場所に配置 (※もし入れ替えが必要なら、ここのロジックを拡張)
+      finalTargetList.todos[targetTime] = draggedTodo;
+
+      return { ...data, lists: newPlans };
+    });
   }
 
   const customClosestCorners: CollisionDetection = (args) => {
