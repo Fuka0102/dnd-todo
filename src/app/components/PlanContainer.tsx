@@ -38,9 +38,11 @@ export type todosData = {
     id: string;
     title: string;
     todos: {
-      id: string;
-      title: string;
-    }[];
+      [time: string]: {
+        id: string;
+        title: string;
+      };
+    };
   }[];
 };
 
