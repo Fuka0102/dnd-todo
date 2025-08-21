@@ -136,35 +136,6 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
     }
   }
 
-  function handleDragOver(event: DragOverEvent) {
-    const sortedData = getSortedData(event);
-
-    if (!sortedData) return;
-
-    const { from, to } = sortedData;
-
-    if (from.containerId === to.containerId) return;
-
-    const fromList = data.lists.find((list) => list.id == from.containerId);
-    const toList = data.lists.find((list) => list.id == to.containerId);
-    if (!fromList || !toList) return;
-
-    const moveTodo = fromList.todos.find((todo) => todo.id === from.items[from.index]);
-    if (!moveTodo) return;
-
-    const newFromTodo = fromList.todos.filter((todo) => todo.id !== moveTodo.id);
-
-    const newToTodo = [...toList.todos.slice(0, to.index), moveTodo, ...toList.todos.slice(to.index)];
-
-    const newLists = data.lists.map((list) => {
-      if (list.id === from.containerId) return { ...list, todos: newFromTodo };
-      if (list.id === to.containerId) return { ...list, todos: newToTodo };
-
-      return list;
-    });
-    setData({ ...data, lists: newLists });
-  }
-
   const customClosestCorners: CollisionDetection = (args) => {
     const cornerCollisions = closestCorners(args);
 
@@ -313,7 +284,6 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
         </div>
         <DndContext
           onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
           id={data.id}
           collisionDetection={closestCenter}
