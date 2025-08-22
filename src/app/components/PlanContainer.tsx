@@ -68,7 +68,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 5 } }));
 
-  const timeSlots = ['08:00', '09:00', '10:00', '11:00'];
+  const timeSlots = ['8:00', '9:00', '10:00', '11:00', '12:00'];
 
   // サーバー保存関数
   const saveToServer = (latestData: todosData) => {
