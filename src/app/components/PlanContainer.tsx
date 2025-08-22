@@ -208,7 +208,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   function onClickEdit(id: string) {
     const copiedTodoData = { ...data };
     copiedTodoData.lists.map((list) => {
-      list.todos.map((todo) => {
+      for (const todo of Object.values(list.todos)) {
         if (todo.id === id) {
           todo.title = editedText ? editedText : todo.title;
 
@@ -218,7 +218,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
             setData(copiedTodoData);
           });
         }
-      });
+      };
     });
   }
 
