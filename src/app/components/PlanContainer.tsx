@@ -192,7 +192,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
     const copiedTodoData = { ...data };
 
     copiedTodoData.lists.map((list) => {
-    for (const [key, value] of Object.entries(list.todos)) {
+      for (const [key, value] of Object.entries(list.todos)) {
         if (value.id === id) {
           delete list.todos[key];
         }
