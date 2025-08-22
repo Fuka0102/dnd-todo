@@ -190,12 +190,13 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
   function onClickDelete(id: string) {
     const copiedTodoData = { ...data };
-    let filteredData = [];
+
     copiedTodoData.lists.map((list) => {
-      filteredData = list.todos.filter((todo) => {
-        return todo.id !== id;
-      });
-      list.todos = filteredData;
+    for (const [key, value] of Object.entries(list.todos)) {
+        if (value.id === id) {
+          delete list.todos[key];
+        }
+      };
     });
 
     // 状態更新を次のレンダリングサイクルに遅延させる
