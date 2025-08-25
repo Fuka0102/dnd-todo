@@ -72,7 +72,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
   // サーバー保存関数
   const saveToServer = (latestData: todosData) => {
-    fetch(`http://localhost:3002/plans/${pageId}`, {
+    fetch(`${API_URL}/api/${pageId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: pageId, todos: latestData }),

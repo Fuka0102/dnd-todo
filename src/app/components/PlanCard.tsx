@@ -13,7 +13,7 @@ export default function PlanCard ({ planData }: {planData: Plan }) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     const deletePlan = (planId: number) => {
-        fetch(`http://localhost:3002/plans`, {
+        fetch(`${API_URL}/api/`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: planId }),

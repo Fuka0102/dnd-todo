@@ -5,7 +5,7 @@ type Plans = Database['public']['Tables']['plans']['Row'];
 
 export default async function Home() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const res = await fetch(`http://localhost:3002/plans`, { cache: "no-store" });
+  const res = await fetch(`${API_URL}/api/`, { cache: "no-store" });
   const plans: Plans[] = await res.json()
 
   return (
