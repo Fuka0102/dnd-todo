@@ -16,7 +16,7 @@ type Data = {
 
 export async function GET() {
     const supabase = await createClient()
-    const { data, error } = await supabase.from('plans').select('*');
+    const { data, error } = await supabase.from('plans_dummy').select('*');
 
     if (error) {
         return NextResponse.json(error);
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     createData();
 
     const { data, error } = await supabase
-        .from('plans')
+        .from('plans_dummy')
         .insert([{ id, title, period, todos, created_at: new Date().toISOString() }]);
 
     if (error) {
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
     const supabase = await createClient()
     const { id } = await req.json();
-    const { data, error } = await supabase.from('plans').delete().eq('id', id);
+    const { data, error } = await supabase.from('plans_dummy').delete().eq('id', id);
 
     if (error) {
         return NextResponse.json(error);

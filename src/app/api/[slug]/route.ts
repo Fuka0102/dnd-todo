@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     const id = req.url?.split("/api/")[1];
 
     const { data, error } = await supabase
-        .from('plans')
+        .from('plans_dummy')
         .select('*')
         .eq('id', id)
         .single();
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     const { id, todos } = await req.json();
 
     const { data, error } = await supabase
-        .from('plans')
+        .from('plans_dummy')
         .update([{ todos }])
         .eq('id', id);
     
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
     const supabase = await createClient()
     const { id } = await req.json();
-    const { data, error } = await supabase.from('plans').delete().eq('id', id);
+    const { data, error } = await supabase.from('plans_dummy').delete().eq('id', id);
 
     if (error) {
         return NextResponse.json(error);
