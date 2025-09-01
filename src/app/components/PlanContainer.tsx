@@ -6,19 +6,13 @@ import React, { useState, useRef } from 'react';
 import {
   DndContext,
   DragEndEvent,
-  Active,
-  Over,
-  CollisionDetection,
-  closestCorners,
   UniqueIdentifier,
   DragStartEvent,
-  DragOverEvent,
   useSensor,
   useSensors,
   MouseSensor,
   closestCenter
 } from '@dnd-kit/core';
-import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import PlanItem from './PlanItem';
 import AddTodo from '../components/AddTodo';
 import Droppable from '../components/Droppable';
@@ -78,7 +72,6 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
       body: JSON.stringify({ id: pageId, todos: latestData }),
     });
   };
-
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
