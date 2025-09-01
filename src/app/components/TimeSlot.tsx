@@ -3,7 +3,12 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 
-export default function TimeSlot({ id, listId, time, children }) {
+export default function TimeSlot({ id, listId, time, children } : {
+  id: string;
+  listId: string;
+  time: string;
+  children: string;
+}){
   const { setNodeRef } = useDroppable({
     id: id,
     data: {
