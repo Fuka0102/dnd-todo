@@ -60,6 +60,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   const [isStartToSave, setIsStartToSave] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const isFirstRender = useRef(true);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -68,6 +69,11 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   const timeSlots = ['8:00', '9:00', '10:00', '11:00', '12:00'];
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     saveToServer(data);
   }, [data]);
 
