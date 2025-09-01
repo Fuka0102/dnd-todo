@@ -19,6 +19,7 @@ import Droppable from '../components/Droppable';
 import TimeSlot from './TimeSlot';
 import AddContainerButton from './AddContainerButton';
 import DeleteContainerButton from './DeleteContainerButton';
+import SaveResult from './SaveResult';
 import { FiSave } from 'react-icons/fi';
 import { MdOutlineCancel } from 'react-icons/md';
 import { Database } from '@/types/database.types';
@@ -56,6 +57,9 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   const [id, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [editedItemId, setEditedItemId] = useState<string | null>(null);
   const [editedText, setEditedText] = useState('');
+  const [isStartToSave, setIsStartToSave] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -65,11 +69,31 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
   // サーバー保存関数
   const saveToServer = (latestData: todosData) => {
+    if (!isStartToSave) {
+      setIsStartToSave(true);
+    }
+
     fetch(`${API_URL}/api/${pageId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: pageId, todos: latestData }),
-    });
+    })
+      .then(response => {
+        setIsStartToSave(false);
+
+        if (!response.ok) {
+          console.error('サーバーエラー');
+          setIsFailed(true)
+          return;
+        }
+
+        setIsCompleted(true);
+      })
+      .catch(error => {
+        setIsStartToSave(false);
+        console.error('通信に失敗しました', error);
+        setIsFailed(true)
+      });
   };
 
   function handleDragStart(event: DragStartEvent) {
@@ -138,6 +162,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
       return { ...data, lists: newPlans };
     });
+
   }
 
   const [todoText, setTodoText] = useState('');
@@ -237,7 +262,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
   function onClickDeleteContainer() {
     const shouldDelete = window.confirm(
-      '最終日のコンテナが消えてしまいますがよろしいですか？n（todoがある場合、一緒に削除されます。ntodoを消したくない場合は、最終日より前のコンテナに移してください）'
+      '最終日のコンテナが消えてしまいますがよろしいですか？\r\n（todoがある場合、一緒に削除されます。\r\ntodoを消したくない場合は、最終日より前のコンテナに移してください）'
     );
 
     if (!shouldDelete) return;
@@ -259,6 +284,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
             <DeleteContainerButton onDeleteList={onClickDeleteContainer} />
           </div>
         </div>
+        <SaveResult isStartToSave={isStartToSave} isCompleted={isCompleted} isFailed={isFailed} />
         <DndContext
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
