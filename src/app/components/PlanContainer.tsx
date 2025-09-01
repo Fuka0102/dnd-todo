@@ -60,6 +60,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   const [isStartToSave, setIsStartToSave] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [editingSlotId, setEditingSlotId] = useState(null);
   const isFirstRender = useRef(true);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -313,7 +314,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
 
                         return (
                           // ここにDroppableなコンポーネント(TimeSlot)を置きます
-                          <TimeSlot key={slotId} id={slotId} listId={list.id} time={time}>
+                          <TimeSlot key={slotId} id={slotId} listId={list.id} time={time} isEditing={editingSlotId === slotId} onClickSlot={() => setEditingSlotId(slotId)} onCreateTodo={handleCreateTodo} >
                             <span className="time-label">{time}</span>
                             {/* もし、その時間にTODOが存在すれば、DraggableなTODOコンポーネントを描画します */}
                             {todo ? 
