@@ -98,11 +98,13 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
         }
 
         setIsCompleted(true);
+        setTimeout(() => setIsCompleted(false), 3000);
       })
       .catch(error => {
         setIsStartToSave(false);
         console.error('通信に失敗しました', error);
         setIsFailed(true)
+        setTimeout(() => setIsFailed(false), 3000);
       });
   };
 
