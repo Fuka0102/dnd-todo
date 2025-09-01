@@ -7,7 +7,7 @@ export default function TimeSlot({ id, listId, time, children } : {
   id: string;
   listId: string;
   time: string;
-  children: string;
+  children: React.ReactNode;
 }){
   const { setNodeRef } = useDroppable({
     id: id,
