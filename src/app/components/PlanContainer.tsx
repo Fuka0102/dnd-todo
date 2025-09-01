@@ -224,7 +224,7 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
     const newList = {
       id: newListId,
       title: `List ${data.lists.length + 1}`,
-      todos: [],
+      todos: {},
     };
 
     const newData = {
