@@ -57,7 +57,6 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   const [editedItemId, setEditedItemId] = useState<string | null>(null);
   const [editedText, setEditedText] = useState('');
 
-  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 5 } }));
