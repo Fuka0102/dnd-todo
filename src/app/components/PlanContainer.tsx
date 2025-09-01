@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -66,6 +66,10 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 5 } }));
 
   const timeSlots = ['8:00', '9:00', '10:00', '11:00', '12:00'];
+
+  useEffect(() => {
+    saveToServer(data);
+  }, [data]);
 
   // サーバー保存関数
   const saveToServer = (latestData: todosData) => {
@@ -257,7 +261,6 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
     };
 
     setData(newData);
-    saveToServer(newData);
   }
 
   function onClickDeleteContainer() {
@@ -271,7 +274,6 @@ export default function PlanContainer({ planData, pageId }: PlanContainerProps) 
     copiedData.lists.pop();
 
     setData(copiedData);
-    saveToServer(copiedData);
   }
 
   return (
