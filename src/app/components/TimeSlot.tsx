@@ -18,9 +18,10 @@ export default function TimeSlot({ id, listId, time, children, isEditing, onSlot
     }
   });
     // 1. もしTODOが存在すれば、TODOアイテムを表示
-  if (todo) {
+  if (children) {
     return (
-      <div className="time-slot">
+      <div className="h-20 outline-gray-700 outline-1 outline-dashed">
+        {children}
       </div>
     );
   }
@@ -34,7 +35,7 @@ export default function TimeSlot({ id, listId, time, children, isEditing, onSlot
   }
 
   return (
-    <div ref={setNodeRef} style={{ height: '50px', border: '1px dashed gray' }}>
+    <div ref={setNodeRef} className="h-20 outline-gray-700 outline-1 outline-dashed">
       {children}
     </div>
   );
